@@ -1,15 +1,8 @@
 import json
-from django.http import JsonResponse
-#from rest_framework.decorators import   
+from django.http import JsonResponse   
 from django.views.decorators.csrf import csrf_exempt
 from .models import Movies
 from django.shortcuts import get_object_or_404
-from django.db import models
-
-
-
-
-#@api_view(['GET', 'POST', 'DELETE' , 'PUT',])
 
 
 # @csrf_exempt
@@ -18,8 +11,6 @@ from django.db import models
 #         getthatfuckinmovies=[allmovies.title for movie in allmovies]
         
 #         return JsonResponse({getthatfuckinmovies})
-        
-
 
 @csrf_exempt  
 def getMoviesId(request, movieId):
@@ -38,7 +29,6 @@ def getMoviesId(request, movieId):
             'Director': movieDirector,
             'Studio': movieStudio,
     })
-    
 
 @csrf_exempt
 def postMovies(request):
@@ -60,9 +50,7 @@ def postMovies(request):
     else:
         
         return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
-    
-    
-    
+
 @csrf_exempt
 def deleteMovies(request, movieId):
     
@@ -77,27 +65,6 @@ def deleteMovies(request, movieId):
     
     else:
         return JsonResponse({'error': f'movie number "{movieId}" not fofound'}, status=404)
-    
-# @csrf_exempt
-# def putMovies(request, movieId):
-#     if request.method=='PUT':
-#         json_data = json.loads(request.body.decode('utf-8'))
-#         movie = get_object_or_404(Movies, id=movieId)
-
-        
-#         movie.title=json_data.get('title', ''),
-#         movie.year=json_data.get('year', ''),
-#         movie.director=json_data.get('director', ''),
-#         movie.studio=json_data.get('studio', ''),
-        
-#         movie.save()
-        
-#         return JsonResponse({'status': 'success', 'message': 'Movie Changed'})
-
-#     else:
-        
-#         return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
-    
 
 @csrf_exempt
 def putMovies(request, movieId):

@@ -23,13 +23,10 @@ from .views import putMovies
 from .views import deleteMovies
 
 
-
-
 urlpatterns = [
     #path('GET/movies/', getMovies),
-    path('GET/movies/<int:movieId>/', getMoviesId),
+    path('GET/movies/<int:movieId>', getMoviesId),
     path('POST/movies/new', postMovies),
     path('PUT/movies/change/<int:movieId>', putMovies),
     path('DELETE/movies/<int:movieId>', deleteMovies),
-    
 ]
