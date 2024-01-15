@@ -10,5 +10,7 @@ class Movies(models.Model):
 class Directors(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
-    bornYear = models.IntegerField()
+    bornYear = models.IntegerField(blank=False, null=False)
+
+
     
