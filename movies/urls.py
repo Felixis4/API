@@ -19,8 +19,8 @@ from django.urls import path
 #from .views import getMovies
 from .views import getMoviesId
 from .views import postMovies
-# from .views import moviesPut
-#from .views import deleteMovies
+from .views import putMovies
+from .views import deleteMovies
 
 
 
@@ -29,7 +29,7 @@ urlpatterns = [
     #path('GET/movies/', getMovies),
     path('GET/movies/<int:movieId>/', getMoviesId),
     path('POST/movies/new', postMovies),
-    # path('PUT/movies/<int:movieId>/', moviesPut),
-    #path('DELETE/movies/', deleteMovies),
+    path('PUT/movies/change/<int:movieId>', putMovies),
+    path('DELETE/movies/<int:movieId>', deleteMovies),
     
 ]
