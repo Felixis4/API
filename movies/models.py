@@ -6,4 +6,9 @@ class Movies(models.Model):
     year = models.IntegerField(blank=False, null=False)
     director = models.CharField(max_length=50)
     studio = models.CharField(max_length=50)
+
+class Directors(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50)
+    bornYear = models.IntegerField()
     

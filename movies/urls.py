@@ -21,12 +21,21 @@ from .views import getMoviesId
 from .views import postMovies
 from .views import putMovies
 from .views import deleteMovies
-
-
+from .views import getDirectorsId
+from .views import postDirectors
+from .views import deleteDirectors
+from .views import putDirectors
 urlpatterns = [
+#URLS for movies
     #path('GET/movies/', getMovies),
-    path('GET/movies/<int:movieId>', getMoviesId),
-    path('POST/movies/new', postMovies),
-    path('PUT/movies/change/<int:movieId>', putMovies),
-    path('DELETE/movies/<int:movieId>', deleteMovies),
+    path('movies/<int:movieId>', getMoviesId),
+    path('movies/new', postMovies),
+    path('movies/change/<int:movieId>', putMovies),
+    path('movies/delete/<int:movieId>', deleteMovies),
+    
+#URLS for directors
+    path('directors/<int:directorId>', getDirectorsId),
+    path('directors/new', postDirectors),
+    path('directors/delete/<int:directorId>', deleteDirectors),
+    path('directors/change/<int:directorId>', putDirectors)
 ]

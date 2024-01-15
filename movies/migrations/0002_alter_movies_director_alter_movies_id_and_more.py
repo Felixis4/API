@@ -30,4 +30,10 @@ class Migration(migrations.Migration):
             name='title',
             field=models.CharField(max_length=50),
         ),
+        migrations.AlterField(
+            model_name='movies',
+            name='year',
+            field=models.IntegerField(blank=False,null=False),
+        )
     ]
+
