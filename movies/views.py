@@ -116,7 +116,7 @@ def getDirectorsId(request, directorId):
     if ifrequest==True:
         director = get_object_or_404(Directors, id=directorId)
         directornumber = director.id
-        directorName = director.nameD
+        directorName = director.name
         return JsonResponse({
             'Director number' : directornumber,
             'Name': directorName,
@@ -135,7 +135,7 @@ def postDirectors(request):
             name=json_data.get('name', ''),
         )
         newDirector.save()
-        return JsonResponse({'status': 'success', 'message': 'Director Added'})
+        return JsonResponse({'status': 'success', 'message': 'Director Added',})
 
     else:
         
@@ -164,7 +164,7 @@ def putDirectors(request, directorId):
         json_data = json.loads(request.body.decode('utf-8'))
         director = get_object_or_404(Directors, id=directorId)
 
-        director.nameD = json_data.get('Name', '')
+        director.name = json_data.get('name', '')
         director.save()
 
         return JsonResponse({'status': 'success', 'message': 'Director Data Changed'})
