@@ -1,20 +1,13 @@
 
-from django.contrib import admin
-from django.urls import path
-#from .views import getMovies
-from .views import getMoviesId
-from .views import postMovies
-from .views import putMovies
-from .views import deleteMovies
-from .views import getDirectorsId
-from .views import postDirectors
-from .views import deleteDirectors
-from .views import putDirectors
-from .views import postCountrys
+
+from django.urls import path, include
+from .views import getMovies,getMoviesId,postMovies,putMovies,deleteMovies
+from .views import getDirectorsId,postDirectors,deleteDirectors,putDirectors
+from .views import postCountrys, customErrors
 
 urlpatterns = [
 #URLS for movies
-    # path('movies/', getMovies),
+    path('movies/', getMovies),
     path('movies/<int:movieId>', getMoviesId),
     path('movies/new', postMovies),
     path('movies/change/<int:movieId>', putMovies),
@@ -27,4 +20,5 @@ urlpatterns = [
     path('directors/change/<int:directorId>', putDirectors),
 #-
     path('country/new', postCountrys),
+    path('<path:invalid_path>', customErrors),
 ]

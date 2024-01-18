@@ -1,38 +1,53 @@
 import json
-from django.http import JsonResponse   
+from django.http import JsonResponse,Http404
+from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
-from .models import Movies
-from .models import Directors
-from .models import Country
+from .models import Movies,Directors,Country
 
 #-----------------------------------------------------------------------------------
 #CRUD OF MOVIES MODEL
 
 @csrf_exempt
 def getMovies(request):
-    if request.method=='GET':
-        allmovies=Movies.objects.all()
-      
-        return JsonResponse(allmovies)
+    if request.method == 'GET':
+        movies = Movies.objects.all()
+        movieList = []
+
+        for movie in movies:
+            movieData = {
+                'id': movie.id,
+                'title': movie.title,
+                'year': movie.year,
+                'country': movie.country.name,
+                'director': movie.director.name,
+                'studio': movie.studio,
+            }
+            movieList.append(movieData)
+
+        return JsonResponse({'movies': movieList})
+    else:
+        return JsonResponse({'error': 'Invalid method'}, status=405)
+
+
+@csrf_exempt
+def getMoviesId(request, movieId):
+    if movieId == True:
+        movie = get_object_or_404(Movies, id=movieId)
+        country = get_object_or_404(Country, id=movieId)
+        director = get_object_or_404(Directors, id=movieId)
+        return JsonResponse({
+                'Movie' : movie.title,
+                'Year': movie.year,
+                'Country': country.name,
+                'Director': director.name,
+                'Studio': movie.studio,
+        })
+    elif movieId!= True:
+        return JsonResponse({'status': 'error', 'message': 'Invalid Number ID'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
-
-
-@csrf_exempt  
-def getMoviesId(request, movieId):
-        
-    movie = get_object_or_404(Movies, id=movieId)
-    country = get_object_or_404(Country, id=movieId)
-    director = get_object_or_404(Directors, id=movieId)
-    return JsonResponse({
-            'Movie' : movie.title,
-            'Year': movie.year,
-            'Country': country.name,
-            'Director': director.name,
-            'Studio': movie.studio,
-    })
-
+    
 @csrf_exempt
 def postMovies(request):
     
@@ -64,14 +79,15 @@ def postMovies(request):
 def deleteMovies(request, movieId):
     
     if request.method=='DELETE':
-        
-        movie = get_object_or_404(Movies, id=movieId)
+        try :
+            movie = get_object_or_404(Movies, id=movieId)
 
-        movie.delete()
-            
-        return JsonResponse({'message': f'movie number "{movieId}" deleted successfully!'})
+            movie.delete()
+            return JsonResponse({'message': f'movie number "{movieId}" deleted successfully!'})
+        except:
+            return JsonResponse({'error': f'movie number "{movieId}" not found'})
     else:
-        return JsonResponse({'error': f'movie number "{movieId}" not fofound'}, status=404)
+        return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=404)
 
 @csrf_exempt
 def putMovies(request, movieId):
@@ -106,7 +122,6 @@ def getDirectorsId(request, directorId):
             'Name': directorName,
     })
     else:
-        
         return JsonResponse({'status': 'error', 'message': f'Director number {directorId} not found'}, status=404)
 
 @csrf_exempt
@@ -117,7 +132,7 @@ def postDirectors(request):
         json_data = json.loads(request.body.decode('utf-8'))
 
         newDirector = Directors(
-            nameD=json_data.get('name', ''),
+            name=json_data.get('name', ''),
         )
         newDirector.save()
         return JsonResponse({'status': 'success', 'message': 'Director Added'})
@@ -159,8 +174,8 @@ def putDirectors(request, directorId):
     #     return JsonResponse({'status': 'error', 'message': 'The method is not PUT'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
-    #----------------------------------------------------------------------------------
-    #Countrys
+#----------------------------------------------------------------------------------
+#Countrys
     
 @csrf_exempt
 def postCountrys(request):
@@ -180,4 +195,12 @@ def postCountrys(request):
     else:
         
         return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)
-    
+
+#Error fuction
+@csrf_exempt
+def customErrors(request, exception=None, *args, **kwargs):
+    if isinstance(exception, Http404) or isinstance(exception, PermissionDenied):
+        return JsonResponse({'status': 'error', 'message': 'Page not found or Permission denied'}, status=404)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Page not found'}, status=500)
+
